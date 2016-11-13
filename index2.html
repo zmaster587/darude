@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <script type="text/javascript">
+        
+            window.allowScript = 0;
+            
+            function getUrl(url, name) {
+                return url.split(name + "=")[1];
+            }
+            
+            function getEmbedYoutube(url2) {
+                var str = url2.split("v%3D")[1];
+                return "https://www.youtube.com/embed/" + str;
+            }
+            
+            function getFirstVideo(query) {
+            
+                if(query == '')
+                    return;
+            
+                query = query.replace(/ /gi, "+");
+                var xmlHttp = new XMLHttpRequest();
+                
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                        var str = xmlHttp.responseText;
+                        var startIndex = str.search("\"videoId\":");
+                        str = str.substr(startIndex + 12).split("\"")[0];
+                        
+                        document.getElementById("MainFrame").src = "https://www.youtube.com/embed/" + str;
+                    }
+                }
+                
+                xmlHttp.open("GET", "https://www.googleapis.com/youtube/v3/search?&part=snippet&q=" + query + "&key=AIzaSyCym1MnvXoR_zpGdjBCz3BNlRifXyDkPQ4&maxResults=1");
+                xmlHttp.send(null);
+                window.allowScript = 1;
+            }
+            
+            window.urlName = getEmbedYoutube(getUrl(window.location.href, "video").replace(/%2F/gi, "/").replace(/%3A/gi, ":"));
+            
+        </script>
+    </head>
+    <body id="body" style="overflow: hidden; background-size:cover" background="gandalf.jpg">
+    <center><iframe ID=MainFrame align=left style="visibility:hidden; overflow:hidden; position: absolute; left:30%;  top:20%" width="560" height="300" src="https://www.youtube.com/embed/zwI0I6SlFro?&autoplay=0&loop=1&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe></center>
+    <iframe ID=DarudeVideo align=left style="visibility:hidden; overflow:hidden; position: absolute; left: 200px; top:0px" width="560" height="300" src="" frameborder="0" allowfullscreen></iframe>
+    
+    
+    <div id="loaderVis" style="visibility:hidden; position: absolute; top:50%; width:33%; left:33%; border: solid; background-color: #FFF; height:10px; margin:0px">
+        <div ID="loadText" align=left style="position: absolute; top:-20px; width:100%; color:#fff"><img src='http://i1.kym-cdn.com/photos/images/newsfeed/001/043/243/419.gif'></div>
+        <div ID="loadbar" style="position: relative; top:50%; width:100%;">
+            <hr align=left size=10px width=100% style="border: none; background-color: #F33; position: relative; margin:0px; margin-top:-5px">
+            <hr align=left size=5px width=100% style="border: none; background-color: #A33; position: relative; margin: 0px; margin-top:-1px">
+        </div>
+    </div>
+    
+    <center><div id="found" style="visibility: hidden; position: absolute; top:33%; width:100%"><font style="font-size: 150px" id="foundFont" color="#A11" face="impact">Match Found!</font></div></center>
+    
+    <div id="form" style="position: absolute; top: 40%; left: 40%"> <font face="verdana" size=5 color="#FFF"><form action="" method="get">
+        WHAT SONG IS THIS? <br><input type="text" name="video" style="width:260px"><br>
+        <input type="submit" value="Look it up!" style="width:260px; height: 50px">
+    </form></font></div>
+    
+    <script>getFirstVideo(getUrl(window.location.href, "video"))</script>
+    
+    
+    <script>
+        
+        if(window.allowScript == 1)
+            setInterval(moveWindow, 1);
+        
+        var words = ["Searching Videos", "Finding trending", "Analysing protocols", "Converting Flash", "Eating Pizza",
+        "Raytracing Video", "Debating Generes", "Comparing pixel quality", "Finding trending memes", "reticulating splines",
+        "Exploding creepers", "Grinding Lyrics", "Evaluating preferences", "sniffing ports", "Connecting to China", "Activating wireshaft",
+        "Decommpressing data", "Finding keywords", "Summoning Travolta"];
+        
+        var xPos = 5000;
+        var yPos = 150;
+        var trans = 0;
+        var side = 0;
+        var vSide = 0;
+        var tSide = 0;
+        var timer = 0;
+        var loadBar = 0;
+    
+        function moveWindow() {
+        loadBar += 0.05;
+        
+        if(Math.trunc(loadBar) == 0) {
+                document.getElementById("loaderVis").style.visibility="visible";
+                document.getElementById("form").style.visibility="hidden";
+            }
+            
+            if(loadBar < 100) {
+                
+                if(loadBar < 56)
+                    document.getElementById("loadText").innerHTML = "<center>" + words[Math.trunc(loadBar/1.5) % words.length] + "</center>";
+                else if(Math.trunc(loadBar) == 57) {
+                    document.getElementById("loadText").innerHTML ="<center><img style=\"top:-195px;  position: relative\" src='http://i1.kym-cdn.com/photos/images/newsfeed/001/043/243/419.gif'></center>";
+                }
+                
+                document.getElementById("loadbar").style.width = loadBar + "%";
+            }
+            else {
+                document.getElementById("loaderVis").style.visibility="hidden";
+            }
+                
+                
+            if(Math.trunc(loadBar) == 56)
+                document.getElementById("DarudeVideo").src= "https://www.youtube.com/embed/y6120QOlsfU?&autoplay=1&loop=1&controls=0&showinfo=0";
+           
+            if(loadBar > 100) {
+                if(loadBar < 130) {
+                    document.getElementById("found").style.visibility="visible";
+                    document.getElementById("foundFont").style.color = (Math.trunc(loadBar/1.5) % 2) == 1 ? "#FFF" : "#000";
+                }
+                else if(loadBar > 300 && loadBar < 400) {
+                    document.getElementById("found").style.visibility="visible";
+                    document.getElementById("foundFont").style.color = "#FFF";
+                    document.getElementById("foundFont").style.opacity = (400 - loadBar)/100;
+                    document.getElementById("foundFont").innerHTML="BUT WE THINK YOU MEANT";
+                    
+                }
+                else
+                    document.getElementById("found").style.visibility="hidden";
+            }
+            if(Math.trunc(loadBar) == 130) {
+                
+                document.getElementById("MainFrame").style.visibility="visible";
+            }
+            
+            if(Math.trunc(loadBar) == 451) {
+                document.getElementById("DarudeVideo").style.visibility="visible";
+            }
+            
+            //Bounce
+            if(loadBar > 206) {
+                
+                var speed = 4;
+                
+                if(side == 0)
+                    xPos = xPos - speed;
+                else
+                    xPos = xPos + speed;
+                    
+                if(xPos < 0)
+                    side = 1;
+                if(xPos > window.innerWidth - document.getElementById("DarudeVideo").width)
+                    side = 0;
+                    
+                if(vSide == 0)
+                    yPos = yPos - speed;
+                else
+                    yPos = yPos + speed;
+                    
+                if(yPos < 0)
+                    vSide = 1;
+                if(yPos > window.innerHeight - document.getElementById("DarudeVideo").height)
+                    vSide = 0;
+                    
+                    
+                if(tSide == 0)
+                    trans = trans - .001;
+                else
+                    trans = trans + .001;
+                    
+                if(trans < 0)
+                    tSide = 1;
+                if(trans > 1)
+                    tSide = 0;
+                
+                document.getElementById("DarudeVideo").style.left = xPos + "px";
+                document.getElementById("DarudeVideo").style.top =  yPos + "px";
+            }
+            //document.getElementById("DarudeVideo").style.opacity =  trans;
+        }
+    
+    </script>
+    </body>
+</html>
